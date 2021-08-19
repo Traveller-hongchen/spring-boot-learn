@@ -1,5 +1,6 @@
 package tacos.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,10 @@ import tacos.Ingredient.Type;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import tacos.data.IngredientRepository;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,14 +31,26 @@ import java.util.stream.Collectors;
 // 在本例中，它指定该类将处理路径以 /design 开头的请求
 public class DesignTacoController {
 
+    private final IngredientRepository ingredientRepo;
+
+    @Autowired
+    public DesignTacoController(IngredientRepository ingredientRepo) {
+        this.ingredientRepo = ingredientRepo;
+    }
+
+
     @GetMapping //与requestMapping成对使用
     /**收到get请求所执行的方法
      * Model （模型） 大概是代指发送到前端的数据吧
      * 最后的返回应该还是跳转的意思！！！
      * 或许可以确信就是这样的
+     *
+     * 第三章重构了这个方法，将固定的几个Ingredient对象改成了从数据库查询
+     * 查询的所有的对象都放入了一个泛型数组里，然后还是一样
      */
 
     public String showDesignFrom(Model model){
+        /*
         //创建一个Ingredient的List泛型数组，存储数据
         List<Ingredient> ingredients = Arrays.asList(
                 new Ingredient("FLTO", "Flour Tortilla", Type.WRAP),
@@ -49,7 +64,13 @@ public class DesignTacoController {
                 new Ingredient("SLSA", "Salsa", Type.SAUCE),
                 new Ingredient("SRCR", "Sour Cream", Type.SAUCE)
         );
+        */
+
+        List<Ingredient> ingredients = new ArrayList<>();
+        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
+
         //创建一个Type数组，存储Ingredient的所有Type(其实就5个啦)
+        //现在不止五个了。。（来自第三章）
         Type[] types = Ingredient.Type.values();
         //遍历所有5个Type
         for (Type type : types) {
@@ -60,6 +81,7 @@ public class DesignTacoController {
         }
 
         //这里不是很懂,或许是传过去一个taco对象的引用？
+        //第三章删掉了这一行
         model.addAttribute("design", new Taco());
         return "design";
     }
