@@ -1,6 +1,7 @@
 package tacos.web;
 
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import tacos.Ingredient.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,11 +72,14 @@ public class DesignTacoController {
     /**
      * 如果我没理解错，这个就是用来处理post请求的,请求的页面是"/disgen"
      * 请求的data就是传进来的这个Taco design了吧
-     * 不过最后的这个是跳转到哪里去了？
-     * 额，，，看了下自己注释，第三章会完成这个页面吧。。。
+     * @Valid 是代表 先验证design是否符合标准，如果不符合就将错误抛到errors
+     * 里面。。。
      */
 
-    public String processDesign(Taco design) {
+    public String processDesign(@Valid Taco design, Errors errors) {
+        if (errors.hasErrors()) {
+            return "design";
+        }
         // 保存这个taco设计。。。
         // 但是我看着咋是日志保存起来了。。。
         // 我们将在第三章完成该页面
