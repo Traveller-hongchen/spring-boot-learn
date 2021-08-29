@@ -3,10 +3,9 @@ package tacos.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import tacos.Order;
 import tacos.Taco;
 import tacos.Ingredient;
 import tacos.Ingredient.Type;
@@ -29,7 +28,19 @@ import java.util.stream.Collectors;
 @Controller //标识该类为控制器
 @RequestMapping("/design") //该注解在类级应用时，指定该控制器处理的请求的类型
 // 在本例中，它指定该类将处理路径以 /design 开头的请求
+
+@SessionAttributes("order") //任何模型对象，比如应该保存在会话中的 order 属性，并且可以跨多个请求使用。
 public class DesignTacoController {
+
+    @ModelAttribute(name = "order") //确保在模型中能够创建 Order 对象
+    public Order order() {
+        return new Order();
+    }
+
+    @ModelAttribute(name = "taco")
+    public Taco taco() {
+        return new Taco();
+    }
 
     private final IngredientRepository ingredientRepo;
 
@@ -98,14 +109,19 @@ public class DesignTacoController {
      * 里面。。。
      */
 
-    public String processDesign(@Valid Taco design, Errors errors) {
+    public String processDesign(@Valid Taco design, Errors errors,
+                                @ModelAttribute Order order) { //注解表示此参数应来自模型
         if (errors.hasErrors()) {
             return "design";
         }
+
+
         // 保存这个taco设计。。。
         // 但是我看着咋是日志保存起来了。。。
         // 我们将在第三章完成该页面
-        log.info("Processing design: " + design);
+        Taco saved = designRepo.save(design);
+        order.addDesign(saved);
+        //log.info("Processing design: " + design);
         //redirect: 被称为重定向视图, 表示并非到"/orders/current.html"的页面
         //而是一个get请求
         return "redirect:/orders/current";
