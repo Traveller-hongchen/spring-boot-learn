@@ -13,7 +13,13 @@
       <h1>Order your taco creations!</h1>
 
       <img th:src="@{/images/TacoCloud.png}"/>
+
+      <h3>Your tacos in this order:</h3>
       <a th:href="@{/design}" id="another">Design another taco</a><br/>
+      <ul>
+        <li th:each="taco : ${order.tacos}">
+          <span th:text="${taco.name}">taco name</span></li>
+      </ul>
 
       <div th:if="${#fields.hasErrors()}">
         <span class="validationError">
@@ -22,53 +28,53 @@
       </div>
 
       <h3>Deliver my taco masterpieces to...</h3>
-      <label for="name">Name: </label>
-      <input type="text" th:field="*{name}"/>
-<!-- end::allButValidation[] -->
+      <label for="deliveryName">Name: </label>
+      <input th:field="*{deliveryName}" type="text"/>
+      <!-- end::allButValidation[] -->
       <span class="validationError"
-            th:if="${#fields.hasErrors('name')}"
-            th:errors="*{name}">Name Error</span>
-<!-- tag::allButValidation[] -->
+            th:errors="*{deliveryName}"
+            th:if="${#fields.hasErrors('deliveryName')}">Name Error</span>
+      <!-- tag::allButValidation[] -->
       <br/>
 
-      <label for="street">Street address: </label>
-      <input type="text" th:field="*{street}"/>
-<!-- end::allButValidation[] -->
+      <label for="deliveryStreet">Street address: </label>
+      <input th:field="*{deliveryStreet}" type="text"/>
+      <!-- end::allButValidation[] -->
       <span class="validationError"
-            th:if="${#fields.hasErrors('street')}"
-            th:errors="*{street}">Street Error</span>
-<!-- tag::allButValidation[] -->
+            th:errors="*{deliveryStreet}"
+            th:if="${#fields.hasErrors('deliveryStreet')}">Street Error</span>
+      <!-- tag::allButValidation[] -->
       <br/>
 
-      <label for="city">City: </label>
-      <input type="text" th:field="*{city}"/>
-<!-- end::allButValidation[] -->
+      <label for="deliveryCity">City: </label>
+      <input th:field="*{deliveryCity}" type="text"/>
+      <!-- end::allButValidation[] -->
       <span class="validationError"
-            th:if="${#fields.hasErrors('city')}"
-            th:errors="*{city}">City Error</span>
-<!-- tag::allButValidation[] -->
+            th:errors="*{deliveryCity}"
+            th:if="${#fields.hasErrors('deliveryCity')}">City Error</span>
+      <!-- tag::allButValidation[] -->
       <br/>
 
-      <label for="state">State: </label>
-      <input type="text" th:field="*{state}"/>
-<!-- end::allButValidation[] -->
+      <label for="deliveryState">State: </label>
+      <input th:field="*{deliveryState}" type="text"/>
+      <!-- end::allButValidation[] -->
       <span class="validationError"
-            th:if="${#fields.hasErrors('state')}"
-            th:errors="*{state}">State Error</span>
-<!-- tag::allButValidation[] -->
+            th:errors="*{deliveryState}"
+            th:if="${#fields.hasErrors('deliveryState')}">State Error</span>
+      <!-- tag::allButValidation[] -->
       <br/>
 
-      <label for="zip">Zip code: </label>
-      <input type="text" th:field="*{zip}"/>
-<!-- end::allButValidation[] -->
+      <label for="deliveryZip">Zip code: </label>
+      <input th:field="*{deliveryZip}" type="text"/>
+      <!-- end::allButValidation[] -->
       <span class="validationError"
-            th:if="${#fields.hasErrors('zip')}"
-            th:errors="*{zip}">Zip Error</span>
-<!-- tag::allButValidation[] -->
+            th:errors="*{deliveryZip}"
+            th:if="${#fields.hasErrors('deliveryZip')}">Zip Error</span>
+      <!-- tag::allButValidation[] -->
       <br/>
 
       <h3>Here's how I'll pay...</h3>
-<!-- tag::validatedField[] -->
+      <!-- tag::validatedField[] -->
       <label for="ccNumber">Credit Card #: </label>
       <input type="text" th:field="*{ccNumber}"/>
 <!-- end::allButValidation[] -->
