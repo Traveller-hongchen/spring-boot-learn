@@ -13,6 +13,7 @@ import tacos.Ingredient.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import tacos.data.IngredientRepository;
+import tacos.data.TacoRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * @author 红尘渡者
  */
-@Slf4j //一种日志记录器
+//@Slf4j //一种日志记录器
 @Controller //标识该类为控制器
 @RequestMapping("/design") //该注解在类级应用时，指定该控制器处理的请求的类型
 // 在本例中，它指定该类将处理路径以 /design 开头的请求
@@ -43,10 +44,13 @@ public class DesignTacoController {
     }
 
     private final IngredientRepository ingredientRepo;
+    private TacoRepository designRepo;
 
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo) {
+    public DesignTacoController(IngredientRepository ingredientRepo,
+                                TacoRepository designRepo) {
         this.ingredientRepo = ingredientRepo;
+        this.designRepo = designRepo;
     }
 
 
@@ -60,7 +64,7 @@ public class DesignTacoController {
      * 查询的所有的对象都放入了一个泛型数组里，然后还是一样
      */
 
-    public String showDesignFrom(Model model){
+    public String showDesignForm(Model model) {
         /*
         //创建一个Ingredient的List泛型数组，存储数据
         List<Ingredient> ingredients = Arrays.asList(
@@ -93,7 +97,7 @@ public class DesignTacoController {
 
         //这里不是很懂,或许是传过去一个taco对象的引用？
         //第三章删掉了这一行
-        model.addAttribute("design", new Taco());
+        //model.addAttribute("design", new Taco());
         return "design";
     }
     //挑选与传入Type相应的Ingredient，做成List泛型数组返回
@@ -125,6 +129,8 @@ public class DesignTacoController {
         //redirect: 被称为重定向视图, 表示并非到"/orders/current.html"的页面
         //而是一个get请求
         return "redirect:/orders/current";
+        //return "orderForm";
     }
+
 
 }
